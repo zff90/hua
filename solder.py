@@ -151,7 +151,7 @@ def main():
                 pcb_h = round(pcb_thickness,2)
                 pcb_cell_h = 0
                 mesh_size = 0.3
-                part_solder = create_y_p(part_name,iner_w,iner_l,outer_r,pcb_h,pcb_cell_h,mesh_size,solid_h=1)
+                part_solder = create_j_y(part_name,iner_w,iner_l,outer_r,pcb_h,pcb_cell_h,mesh_size,solid_h=1)
                 if iner_l != iner_w:
                     coords = (iner_l/2,0,0)
                     node = base.NearestNode(coords, 0.01, [part_solder])
@@ -161,6 +161,27 @@ def main():
             #外跑道内矩
             elif solder_type == "course" and pin_type == "rectangle":
                 #需要考虑矩形长边和跑道长边的匹配关系
+                pin_center =[]
+                for pin_p in pin_points:
+                    p_mid = get_mid_p(pin_p[0],pin_p[2])
+                    pin_center.append(p_mid)
+                outer_r = round(get_distance_p(solder_points[0][0],solder_points[0][2]),2)/2
+                outer_l = round(get_distance_p(solder_points[0][2],solder_points[0][3]),2)
+                iner_l = round(get_distance_p(pin_points[0][0],pin_points[0][1]),2)
+                iner_w = round(get_distance_p(pin_points[0][0],pin_points[0][3]),2)
+                vector_l_0 = get_vector_p(solder_points[0][2],solder_points[0][3])
+                vector_l_1 = get_vector_p(pin_points[0][0],pin_points[0][1])
+                angle_d,Second_point2 = get_ang_two_vector(vector_l_0,vector_l_1)
+                if 85 < angle_d  and angle_d < 95:
+                    iner_w = iner_l
+                    iner_l = iner_w
+                pcb_h = round(pcb_thickness,2)
+                pcb_cell_h = 0
+                mesh_size = 0.3
+                part_solder = create_j_p(part_name,iner_w,iner_l,outer_r,outer_l,pcb_h,pcb_cell_h,mesh_size,solid_h=1)
+                coords = (outer_l/2+outer_r,0,0)
+                node = base.NearestNode(coords, 0.01, [part_solder])
+                tans_solder_p(part_solder,comp_name_new,angle_d,Second_point,pin_num,pin_center,solder_points[0][1],solder_points[0][4],node[0])
                 pass
             #矩形
             elif solder_type == "rectangle":
