@@ -1628,5 +1628,5 @@ def main():
             else:
                 print('ok')
 #main()
-
-create_pcb_pcb(part_name="shjkh",height=1,length=2,dert=0.5,pcb_h=1,mesh_size=0.3,solid_h=1)
+print(000)
+create_pcb_pcb(part_name="shjkh",height=1,length=2,dert=0.5,solder_c=[0,0,0],pcb_h=1,mesh_size=0.3,solid_h=1)
